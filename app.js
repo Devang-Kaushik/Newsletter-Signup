@@ -4,12 +4,13 @@ const app = express(); // !Binding the Express Module to a function i.e., app
 const bodyParser = require('body-parser');
 const request = require('request');
 const https = require('node:https');
+require('dotenv').config();
 
-const port = 3000; // !Defining a port to tune our server to
+const port = process.env.PORT || 3000; // !Defining a port to tune our server to
 
 // process.env.PORT: It's a dynamic port and Heroku will decide it on the go
 // process.env.PORT || port: Using this web app can be used on heroku as well as locally
-app.listen(process.env.PORT || port, () => {
+app.listen(port, () => {
   console.log("Server is tuned to port " + port);
 });
 
@@ -49,12 +50,14 @@ app.post("/", (req, res) => {
   const jsonData = JSON.stringify(data);
 
   // Building an API to be triggered with the data prepared
-  const listId = "81c517d858"; // Unique list id
-  const dataCenter = "us12" // Data center may vary for different users
-  const authToken = "9b8e811f2b5cee65c245d5ca7c2b78c4-us12" // Unique auth token
+  const listId = process.env.LIST_ID; // Unique list id
+  const dataCenter = process.env.DATA_CENTER // Data center may vary for different users
+  const authToken = process.env.API_KEY // Unique auth token
+  const userName = process.env.USER_NAME;
+  console.log(userName);
   const options = {
     method: "POST",
-    auth: "devk01:" + authToken
+    auth: userName + ":" + authToken
   }
   url = "https://" + dataCenter + ".api.mailchimp.com/3.0/lists/" + listId;
 
